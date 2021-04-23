@@ -2,26 +2,41 @@ package com.example.quizapp;
 
 public class CategoryModel {
 
-    private String imageURL, title;
+    private String name;
+    private int sets;
+    private String url;
 
-    public CategoryModel(String imageURL, String title) {
-        this.imageURL = imageURL;
-        this.title = title;
+    public CategoryModel(){
+        //Empty constructor for Firebase
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public CategoryModel(String name, int sets, String url) {
+        this.name = name;
+        this.sets = sets;
+        this.url = url;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public String getName() {
+        return name;
     }
 
-    public String getTitle() {
-        return title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public int getSets() {
+        return sets;
+    }
+
+    public void setSets(int sets) {
+        this.sets = sets;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

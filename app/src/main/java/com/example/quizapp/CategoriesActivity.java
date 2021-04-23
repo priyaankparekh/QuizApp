@@ -3,11 +3,14 @@ package com.example.quizapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
@@ -30,6 +33,10 @@ public class CategoriesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
+    private List<CategoryModel> list;
+
+    private Dialog loadingDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +45,12 @@ public class CategoriesActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Categories");
+
+        //laoding dialog
+        loadingDialog = new Dialog(this);
+        loadingDialog.setContentView(R.layout.loading_dailog);
+        loadingDialog.getWindow().setLayout(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        loadingDialog.setCancelable(false);
 
         //back button - finish activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -48,39 +61,27 @@ public class CategoriesActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<CategoryModel> list = new ArrayList<>();
-        list.add(new CategoryModel("","Category 1"));
-        list.add(new CategoryModel("","Category 2"));
-        list.add(new CategoryModel("","Category 3"));
-        list.add(new CategoryModel("","Category 4"));
-        list.add(new CategoryModel("","Category 5"));
-        list.add(new CategoryModel("","Category 6"));
-        list.add(new CategoryModel("","Category 7"));
-        list.add(new CategoryModel("","Category 8"));
-        list.add(new CategoryModel("","Category 9"));
-        list.add(new CategoryModel("","Category 10"));
-        list.add(new CategoryModel("","Category 11"));
-        list.add(new CategoryModel("","Category 12"));
-        list.add(new CategoryModel("","Category 13"));
-        list.add(new CategoryModel("","Category 14"));
-        list.add(new CategoryModel("","Category 15"));
-        list.add(new CategoryModel("","Category 16"));
-        list.add(new CategoryModel("","Category 17"));
-        list.add(new CategoryModel("","Category 18"));
-
-
+        list = new ArrayList<>();
         CategoryAdapter categoryAdapter = new CategoryAdapter(list);
         recyclerView.setAdapter(categoryAdapter);
 
-        myRef.child("Categories").child("Category1").child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+        loadingDialog.show();
+
+        myRef.child("Categories").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Toast.makeText(CategoriesActivity.this,snapshot.getValue().toString(),Toast.LENGTH_SHORT).show();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    list.add(dataSnapshot.getValue(CategoryModel.class));
+                }
+                categoryAdapter.notifyDataSetChanged();
+                loadingDialog.dismiss();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(CategoriesActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                loadingDialog.dismiss();
+                finish();
             }
         });
 

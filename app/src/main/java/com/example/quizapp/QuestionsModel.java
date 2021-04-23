@@ -4,7 +4,14 @@ public class QuestionsModel {
 
     private String question,optionA,optionB,optionC,optionD,correctAns;
 
-    public QuestionsModel(String question, String optionA, String optionB, String optionC, String optionD, String correctAns) {
+    private int setNo;
+
+    public QuestionsModel(){
+        //Empty constructor for Firebase
+    }
+
+    public QuestionsModel(String question, String optionA, String optionB, String optionC, String optionD, String correctAns, int setNo) {
+        this.setNo = setNo;
         this.question = question;
         this.optionA = optionA;
         this.optionB = optionB;
@@ -59,5 +66,13 @@ public class QuestionsModel {
 
     public void setCorrectAns(String correctAns) {
         this.correctAns = correctAns;
+    }
+
+    public int getSetNo() {
+        return setNo;
+    }
+
+    public void setSetNo(int setNo) {
+        this.setNo = setNo;
     }
 }

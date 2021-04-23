@@ -156,6 +156,7 @@ public class QuestionsActivity extends AppCompatActivity {
             score++;
         }else{
             //Incorrect Ans
+            //Marking the incorrect option with red border and highlighting the correct ans
             selOption.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ff0000")));
             Button correctOption = (Button) optionsContainer.findViewWithTag(list.get(position).getCorrectAns());
             correctOption.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
